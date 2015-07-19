@@ -10,7 +10,10 @@ namespace GildedRose.Console
         public const int MinQuality = 0;
         public const int MaxQuality = 50;
         public const string HandOfRagnaros = "Sulfuras, Hand of Ragnaros";
-        public IList<string> NormalItems = new List<string> { "+5 Dexterity Vest" };
+        public const string AgedBrie = "Aged Brie";
+        public const string BackstagePass = "Backstage passes to a TAFKAL80ETC concert";
+        public const string ConjuredCake = "Conjured Mana Cake";
+        public IList<string> NormalItem = new List<string> { "+5 Dexterity Vest", "Elixir of the Mongoose" };
         #endregion
 
         static void Main(string[] args)
@@ -39,7 +42,7 @@ namespace GildedRose.Console
         {
             foreach (var item in Items)
             {
-                if (item.Name != "Sulfuras, Hand of Ragnaros")
+                if (item.Name != HandOfRagnaros)
                 {
                     MaturingItemsUpdate(item);                    
                     item.SellIn--;
@@ -48,45 +51,13 @@ namespace GildedRose.Console
             }
         }
 
-        private static void ExpiredItemsUpdate(Item item)
-        {
-            if (item.SellIn < MinQuality)
-            {
-                if (item.Name != "Aged Brie")
-                {
-                    if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
-                    {
-                        if (item.Quality > MinQuality)
-                        {
-                            if (item.Name != "Sulfuras, Hand of Ragnaros")
-                            {
-                                item.Quality--;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        item.Quality = MinQuality;
-                    }
-                }
-                else
-                {
-                    if (item.Quality < MaxQuality)
-                    {
-                        item.Quality++;
-                    }
-                }
-            }
-        }
-
         private void MaturingItemsUpdate(Item item)
         {
-            //NormalItems.Contains(item.Name);
-            if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
+            if (item.Name != AgedBrie && item.Name != BackstagePass)
             {
                 if (item.Quality > MinQuality)
                 {
-                    if (item.Name != "Sulfuras, Hand of Ragnaros")
+                    if (item.Name != HandOfRagnaros)
                     {
                         item.Quality--;
                     }
@@ -98,7 +69,7 @@ namespace GildedRose.Console
                 {
                     item.Quality++;
 
-                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                    if (item.Name == BackstagePass)
                     {
                         if (item.SellIn < 11)
                         {
@@ -115,6 +86,36 @@ namespace GildedRose.Console
                                 item.Quality++;
                             }
                         }
+                    }
+                }
+            }
+        }
+        private static void ExpiredItemsUpdate(Item item)
+        {
+            if (item.SellIn < MinQuality)
+            {
+                if (item.Name != AgedBrie)
+                {
+                    if (item.Name != BackstagePass)
+                    {
+                        if (item.Quality > MinQuality)
+                        {
+                            if (item.Name != HandOfRagnaros)
+                            {
+                                item.Quality--;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        item.Quality = MinQuality;
+                    }
+                }
+                else
+                {
+                    if (item.Quality < MaxQuality)
+                    {
+                        item.Quality++;
                     }
                 }
             }
