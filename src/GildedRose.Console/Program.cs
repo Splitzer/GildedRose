@@ -7,7 +7,6 @@ namespace GildedRose.Console
         public IList<Item> Items;
 
         #region Program Constants
-        public const int MinQuality = 0;
         public const int MaxQuality = 50;
         public const string HandOfRagnaros = "Sulfuras, Hand of Ragnaros";
         public const string AgedBrie = "Aged Brie";
@@ -44,8 +43,7 @@ namespace GildedRose.Console
             {
                 if (item.Name != HandOfRagnaros)
                 {
-                    MaturingItemsUpdate(item);                    
-                    item.SellIn--;
+                    MaturingItemsUpdate(item);
                     ExpiredItemsUpdate(item);
                 }
             }
@@ -53,14 +51,19 @@ namespace GildedRose.Console
 
         private void MaturingItemsUpdate(Item item)
         {
-            if (item.Name != AgedBrie && item.Name != BackstagePass)
+            if (NormalItem.Contains(item.Name))
             {
-                if (item.Quality > MinQuality)
+                if (item.Quality > 0)
                 {
-                    if (item.Name != HandOfRagnaros)
-                    {
-                        item.Quality--;
-                    }
+                    item.Quality--;
+                }
+            }
+            else if (item.Name == ConjuredCake)
+            {
+                item.Quality -= 2;
+                if (item.Quality < 0)
+                {
+                    item.Quality = 0;
                 }
             }
             else
@@ -68,55 +71,47 @@ namespace GildedRose.Console
                 if (item.Quality < MaxQuality)
                 {
                     item.Quality++;
+                }
 
-                    if (item.Name == BackstagePass)
+                if (item.Name == BackstagePass && item.SellIn < 11 && item.Quality < MaxQuality)
+                {
+                    item.Quality++;
+                    if (item.SellIn < 6 && item.Quality < MaxQuality)
                     {
-                        if (item.SellIn < 11)
-                        {
-                            if (item.Quality < MaxQuality)
-                            {
-                                item.Quality++;
-                            }
-                        }
-
-                        if (item.SellIn < 6)
-                        {
-                            if (item.Quality < MaxQuality)
-                            {
-                                item.Quality++;
-                            }
-                        }
+                        item.Quality++;
                     }
                 }
             }
         }
-        private static void ExpiredItemsUpdate(Item item)
+
+        private void ExpiredItemsUpdate(Item item)
         {
-            if (item.SellIn < MinQuality)
+            item.SellIn--;
+
+            if (item.SellIn < 0)
             {
-                if (item.Name != AgedBrie)
+                if (NormalItem.Contains(item.Name) && item.Quality > 0)
                 {
-                    if (item.Name != BackstagePass)
+                    item.Quality--;
+                }
+
+                if (item.Name == ConjuredCake)
+                {
+                    item.Quality -= 2;
+                    if (item.Quality < 0)
                     {
-                        if (item.Quality > MinQuality)
-                        {
-                            if (item.Name != HandOfRagnaros)
-                            {
-                                item.Quality--;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        item.Quality = MinQuality;
+                        item.Quality = 0;
                     }
                 }
-                else
+
+                if (item.Name == BackstagePass || item.Quality < 0)
                 {
-                    if (item.Quality < MaxQuality)
-                    {
-                        item.Quality++;
-                    }
+                    item.Quality = 0;
+                }
+
+                if (item.Name == AgedBrie && item.Quality < MaxQuality)
+                {
+                    item.Quality++;
                 }
             }
         }

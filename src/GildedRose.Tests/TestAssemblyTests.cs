@@ -12,7 +12,7 @@ namespace GildedRose.Tests
         {
             Program app = new Program();
 
-            app.Items = new List<Item> { new Item { Name = "Common Tunic", SellIn = 1, Quality = 1 } };
+            app.Items = new List<Item> { new Item { Name = "Elixir of the Mongoose", SellIn = 1, Quality = 1 } };
             app.UpdateQuality();
             Assert.Equal(0, app.Items[0].Quality);
             Assert.Equal(0, app.Items[0].SellIn);
@@ -23,7 +23,7 @@ namespace GildedRose.Tests
         {
             Program app = new Program();
 
-            app.Items = new List<Item> { new Item { Name = "Common Tunic", SellIn = 0, Quality = 3 } };
+            app.Items = new List<Item> { new Item { Name = "Elixir of the Mongoose", SellIn = 0, Quality = 3 } };
             app.UpdateQuality();
             Assert.Equal(1, app.Items[0].Quality);
             Assert.Equal(-1, app.Items[0].SellIn);
@@ -34,7 +34,7 @@ namespace GildedRose.Tests
         {
             Program app = new Program();
 
-            app.Items = new List<Item> { new Item { Name = "Common Tunic", SellIn = -1, Quality = 0 } };
+            app.Items = new List<Item> { new Item { Name = "Elixir of the Mongoose", SellIn = -1, Quality = 0 } };
             app.UpdateQuality();
             Assert.Equal(0, app.Items[0].Quality);
             Assert.Equal(-2, app.Items[0].SellIn);
@@ -175,6 +175,51 @@ namespace GildedRose.Tests
             app.UpdateQuality();
             Assert.Equal(50, app.Items[0].Quality);
             Assert.Equal(12, app.Items[0].SellIn);
+        }
+
+        ///////////////////// /* Conjured Items */ /////////////////////
+        [Fact]
+        public void ConjuredQulityDecreaseTest()
+        {
+            Program app = new Program();
+
+            app.Items = new List<Item> { new Item { Name = "Conjured Mana Cake", SellIn = 3, Quality = 6 } };
+            app.UpdateQuality();
+            Assert.Equal(4, app.Items[0].Quality);
+            Assert.Equal(2, app.Items[0].SellIn);
+        }
+
+        [Fact]
+        public void ConjuredExpiredQulityDecreaseTest()
+        {     
+            Program app = new Program();
+            
+            app.Items = new List<Item> { new Item { Name = "Conjured Mana Cake", SellIn = 0, Quality = 6 } };
+            app.UpdateQuality();
+            Assert.Equal(2, app.Items[0].Quality);
+            Assert.Equal(-1, app.Items[0].SellIn);
+        }
+
+        [Fact]
+        public void ConjuredQulityZeroTest()
+        {
+            Program app = new Program();
+
+            app.Items = new List<Item> { new Item { Name = "Conjured Mana Cake", SellIn = 2, Quality = 0 } };
+            app.UpdateQuality();
+            Assert.Equal(0, app.Items[0].Quality);
+            Assert.Equal(1, app.Items[0].SellIn);
+        }
+
+        [Fact]
+        public void ConjuredExpiredQulityZeroTest()
+        {
+            Program app = new Program();
+
+            app.Items = new List<Item> { new Item { Name = "Conjured Mana Cake", SellIn = 0, Quality = 0 } };
+            app.UpdateQuality();
+            Assert.Equal(0, app.Items[0].Quality);
+            Assert.Equal(-1, app.Items[0].SellIn);
         }
     }
 }
